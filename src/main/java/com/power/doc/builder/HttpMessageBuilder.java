@@ -19,7 +19,6 @@ import static com.power.doc.utils.TornaUtil.*;
 
 /**
  * @author biding
- * @create 2023/1/16 11:06
  */
 public class HttpMessageBuilder {
 
@@ -52,31 +51,39 @@ public class HttpMessageBuilder {
         buildTorna(apiDocList, config, javaProjectBuilder);
     }
 
+    /**
+     * build torna Data
+     *
+     * @param apiDocs   apiData
+     * @param apiConfig ApiConfig
+     * @param builder   JavaProjectBuilder
+     */
     public static void buildTorna(List<ApiDoc> apiDocs, ApiConfig apiConfig, JavaProjectBuilder builder) {
-        List<Apis> groupApiList = new ArrayList<>();
-        //Convert ApiDoc to Apis
-        for (ApiDoc groupApi : apiDocs) {
-            List<Apis> apisList = new ArrayList<>();
-            List<ApiDoc> childrenApiDocs = groupApi.getChildrenApiDocs();
-            for (ApiDoc a : childrenApiDocs) {
-                final Apis api = new Apis();
-                api.setName(StringUtils.isBlank(a.getDesc()) ? a.getName() : a.getDesc());
-                api.setItems(buildApis(a.getList(), false));
-                api.setIsFolder(TornaConstants.YES);
-                api.setAuthor(a.getAuthor());
-                api.setOrderIndex(a.getOrder());
-                apisList.add(api);
-            }
-            final Apis api = new Apis();
-            api.setName(StringUtils.isBlank(groupApi.getDesc()) ? groupApi.getName() : groupApi.getDesc());
-            api.setOrderIndex(groupApi.getOrder());
-            api.setIsFolder(TornaConstants.YES);
-            api.setItems(apisList);
-            groupApiList.add(api);
-
+        if (apiDocs.size() == 0) {
+            return;
         }
+
+        ApiDoc doc = apiDocs.get(0);
+        List<Apis> items = new ArrayList<>();
+        for (ApiDoc a : doc.getChildrenApiDocs()) {
+            final Apis api = new Apis();
+            api.setName(StringUtils.isBlank(a.getDesc()) ? a.getName() : a.getDesc());
+            api.setItems(buildApis(a.getList(), false));
+            api.setIsFolder(TornaConstants.YES);
+            api.setAuthor(a.getAuthor());
+            api.setOrderIndex(a.getOrder());
+            api.setClassName(a.getName());
+            api.setPackageName(a.getPackageName());
+            items.add(api);
+        }
+        final Apis api = new Apis();
+        api.setName(StringUtils.defaultIfBlank(apiConfig.getServiceName(), "UNKNOWN"));
+        api.setOrderIndex(doc.getOrder());
+        api.setIsFolder(TornaConstants.YES);
+        api.setItems(items);
+
         //Get the response result
-        String responseMsg = OkHttp3Util.syncPostJson(apiConfig.getOpenUrl(), new Gson().toJson(groupApiList));
+        String responseMsg = OkHttp3Util.syncPostJson(apiConfig.getOpenUrl(), new Gson().toJson(api));
         // print response message
         System.out.println(responseMsg);
     }

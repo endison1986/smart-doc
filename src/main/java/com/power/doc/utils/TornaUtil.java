@@ -86,6 +86,7 @@ public class TornaUtil {
             methodApi.setIsShow(TornaConstants.YES);
             methodApi.setAuthor(apiMethodDoc.getAuthor());
             methodApi.setOrderIndex(apiMethodDoc.getOrder());
+            methodApi.setMethodName(apiMethodDoc.getName());
 
             methodApi.setHeaderParams(buildHerder(apiMethodDoc.getRequestHeaders()));
             methodApi.setResponseParams(buildParams(apiMethodDoc.getResponseParams()));

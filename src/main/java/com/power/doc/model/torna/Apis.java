@@ -51,6 +51,33 @@ public class Apis {
     private Integer isResponseArray;
     private String responseArrayType;
     private String deprecated;
+    private String className;
+    private String methodName;
+    private String packageName;
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
 
     public Integer getIsRequestArray() {
         return isRequestArray;

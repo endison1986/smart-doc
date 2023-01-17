@@ -26,10 +26,8 @@ import com.power.common.util.CollectionUtil;
 import com.power.doc.constants.DocLanguage;
 import com.power.doc.model.rpc.RpcApiDependency;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Description:
@@ -38,6 +36,20 @@ import java.util.stream.Collectors;
  * @author yu 2018/06/18.
  */
 public class ApiConfig {
+    /**
+     * microservice name
+     *
+     * @since 2.4.3_M1
+     */
+    private String serviceName;
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
 
     /**
      * Web server base url
@@ -361,6 +373,7 @@ public class ApiConfig {
 
     /**
      * replace old document while push to torna
+     *
      * @since 2.2.4
      */
     private Boolean replace;
@@ -599,7 +612,7 @@ public class ApiConfig {
             return null;
         }
         return this.dataDictionaries.stream().filter((apiDataDictionary ->
-                enumClassName.equalsIgnoreCase(apiDataDictionary.getEnumClassName())))
+                        enumClassName.equalsIgnoreCase(apiDataDictionary.getEnumClassName())))
                 .findFirst().orElse(null);
     }
 
